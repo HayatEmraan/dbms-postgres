@@ -121,3 +121,13 @@ SELECT * FROM students WHERE first_name LIKE '__a%';
 
 
 SELECT * FROM students WHERE first_name ILIKE 'a%';
+
+
+
+SELECT * FROM students WHERE country = 'Bangladesh';
+
+
+DELETE FROM students WHERE student_id = 1;
+
+
+UPDATE students SET country = 'Bangladesh' WHERE student_id = 14;
