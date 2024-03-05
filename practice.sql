@@ -119,27 +119,39 @@ VALUES (
         'Mia Roberts', 10, 70000.25, '2021-11-20'
     );
 
-
 SELECT * FROM departments;
-
 
 SELECT * FROM employees;
 
+SELECT * FROM departments JOIN employees USING (department_id);
 
-SELECT * FROM departments JOIN employees USING(department_id);
+SELECT department_name, AVG(salary)
+FROM departments
+    JOIN employees USING (department_id)
+GROUP BY
+    departments.department_name;
 
+SELECT count(*), department_name
+FROM employees
+    JOIN departments USING (department_id)
+GROUP BY
+    departments.department_name;
 
-SELECT department_name, AVG(salary) FROM departments JOIN employees USING(department_id) GROUP BY departments.department_name;
+SELECT department_name, round(AVG(salary))
+FROM employees
+    INNER JOIN departments USING (department_id)
+GROUP BY
+    department_name
+ORDER BY round DESC
+LIMIT 1;
 
-
-SELECT count(*), department_name FROM employees JOIN departments USING(department_id) GROUP BY departments.department_name;
-
-
-SELECT department_name, round(AVG(salary)) FROM employees INNER JOIN departments USING(department_id) GROUP BY department_name ORDER BY round DESC LIMIT 1;
-
-
-SELECT COUNT(*), extract(YEAR FROM hire_date) as hire_rate FROM employees GROUP BY hire_rate;
-
+SELECT COUNT(*), extract(
+        YEAR
+        FROM hire_date
+    ) as hire_rate
+FROM employees
+GROUP BY
+    hire_rate;
 
 CREATE TABLE orders (
     order_id SERIAL PRIMARY KEY, customer_id INT, order_date DATE, total_amount DECIMAL(10, 2)
@@ -161,7 +173,22 @@ VALUES (1, '2022-01-05', 100.50),
     (1, '2022-02-05', 180.25),
     (4, '2023-02-05', 190.25);
 
-SELECT SUM(total_amount), extract(MONTH FROM order_date::date) as order_high FROM orders GROUP BY order_high;
+SELECT SUM(total_amount), extract(
+        MONTH
+        FROM order_date
+    ) as order_high
+FROM orders
+WHERE
+    extract(
+        YEAR
+        FROM order_date
+    ) = 2022
+GROUP BY
+    order_high;
 
-
-SELECT SUM(total_amount), count(*) as order_count, customer_id FROM orders GROUP BY customer_id HAVING count(*) > 2; 
+SELECT SUM(total_amount), count(*) as order_count, customer_id
+FROM orders
+GROUP BY
+    customer_id
+HAVING
+    count(*) > 2;
